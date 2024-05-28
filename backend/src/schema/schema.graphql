@@ -1,0 +1,73 @@
+type Warehouse {
+  id: ID!
+  name: String!
+  products: [Product!]! # changed product_ids to products to reflect proper associations
+  size: Int!
+  hazardous: Boolean!
+  created_at: String!
+  updated_at: String!
+}
+
+type Product {
+  id: ID!
+  name: String!
+  quantity: Int!
+  warehouse: Warehouse!
+  price: Float!
+  size: Int!
+  hazardous: Boolean!
+  created_at: String!
+  updated_at: String!
+}
+
+type StockMovement {
+  id: ID!
+  warehouse_id: Int!
+  product_id: Int! # changed productId to product_id to match field name in the model
+  quantity: Int!
+  type: String!
+  date: String!
+  created_at: String! # Added created_at field for consistency
+  updated_at: String! # Added updated_at field for consistency
+}
+
+type Query {
+  warehouses: [Warehouse!]!
+  products: [Product!]!
+  stockMovements: [StockMovement!]!
+  warehouseById(id: ID!): Warehouse
+  productById(id: ID!): Product
+}
+
+input AddWarehouseInput {
+  name: String!
+  size: Int!
+  hazardous: Boolean!
+}
+
+input AddProductInput {
+  id: String!
+  name: String!
+  quantity: Int!
+  warehouse_id: Int!
+  hazardous: Boolean!
+  price: Float!
+  size: Int!
+}
+
+input AddMovementInput {
+  warehouse_id: Int!
+  product_id: Int! # changed productId to product_id to match the model
+  quantity: Int!
+  type: String!
+  date: String!
+}
+
+type Mutation {
+  addWarehouse(name: String!, size: Int!, hazardous: Boolean!): Warehouse!
+  addProduct(name: String!, size: Int!, warehouse_id: Int!, quantity: Int!, price: Float!, hazardous: Boolean!): Product!
+  updateProduct(id: String!, name: String!, size: Int!, warehouse_id: Int!, quantity: Int!, price: Float!, hazardous: Boolean!): Product!
+  addStockMovement(warehouse_id: Int!, productId: Int!, quantity: Int!, type: String!, date: String!): StockMovement!
+  deleteProduct(id: ID!): ID # New mutation for deleting a product
+  deleteWarehouse(id: ID!): ID
+}
